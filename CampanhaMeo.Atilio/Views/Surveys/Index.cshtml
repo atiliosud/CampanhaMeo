@@ -1,0 +1,66 @@
+﻿@using CampanhaMeo.Atilio.Helpers
+@model IEnumerable<CampanhaMeo.Atilio.Models.Survey>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Criar novo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                <b>
+                    @Html.DisplayNameFor(model => model.Title)
+                </b>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                Respondidos
+            </th>
+            <th>
+                <small>@Html.DisplayNameFor(model => model.CreateBy)</small>
+            </th>
+            <th>
+                <small>@Html.DisplayNameFor(model => model.CreateAt)</small>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <a asp-controller="Public" asp-action="Reply" asp-route-id="@item.FriendlyUrl">Responder</a> 
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @item.GetAnswerGroups().Count
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateBy.Email)
+            </td>
+            <td>
+                @item.CreateAt.Relative()
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Perguntas</a> |
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

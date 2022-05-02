@@ -1,0 +1,54 @@
+﻿@model CampanhaMeo.Atilio.ModelViews.QuestionCreateFreeText
+
+@{
+    ViewData["Title"] = "CreateFreeText";
+}
+
+<h1>CreateFreeText</h1>
+
+<h4>QuestionCreateFreeText</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateFreeText">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SurveyId" />
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order" class="control-label"></label>
+                <input asp-for="Order" class="form-control" />
+                <span asp-validation-for="Order" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HelpText" class="control-label"></label>
+                <input asp-for="HelpText" class="form-control" />
+                <span asp-validation-for="HelpText" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mask" class="control-label"></label>
+                <input asp-for="Mask" class="form-control" />
+                <span asp-validation-for="Mask" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AnswerMaxLenght" class="control-label"></label>
+                <input asp-for="AnswerMaxLenght" class="form-control" />
+                <span asp-validation-for="AnswerMaxLenght" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

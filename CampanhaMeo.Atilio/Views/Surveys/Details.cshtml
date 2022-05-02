@@ -1,0 +1,148 @@
+﻿@model CampanhaMeo.Atilio.Models.Survey
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Survey</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FriendlyUrl)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FriendlyUrl)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreateBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreateBy.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreateAt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Model.CreateAt.ToString()
+        </dd>
+    </dl>
+    <hr />
+    <h4>Perguntas </h4>
+    <ul>
+<li><a asp-controller="Questions" asp-action="CreateFreeText" asp-route-surveyId="@Model.Id">Criar pergunta livre</a></li>
+@for (var i = 2; i < 6; i++)
+{
+    
+<li><a asp-controller="Questions" asp-action="CreateSingleSelect" asp-route-surveyId="@Model.Id" asp-route-numbOptions="@i">Criar pergunta de seleção única com @i opções</a></li>
+}
+@for (var i = 2; i < 6; i++)
+{
+   
+<li><a asp-controller="Questions" asp-action="CreateMultiSelect" asp-route-surveyId="@Model.Id" asp-route-numbOptions="@i">Criar pergunta de múltipla escolha com @i opções</a></li>
+}
+</ul>
+    <hr />
+    <table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].Content)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].CreateBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Questions[0].CreateAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Questions) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order)
+            </td>
+            <td>
+                @if(item.Content is QuestionStructFreeText)
+                {
+                    QuestionStructFreeText c = item.Content as QuestionStructFreeText;
+                     <b>Texto livre</b> <br />
+                     <b>texto de ajuda: </b> @c.HelpText <br />
+                     <b>máscara: </b> @c.Mask <br />
+                     <b>máximo de caractéreres: </b> @c.AnswerMaxLenght <br />
+
+                }else if(item.Content is QuestionStructMultiSelect)
+                {
+                    QuestionStructMultiSelect c = item.Content as QuestionStructMultiSelect;
+                     <b>Multipla escolha</b> <br />
+                     <b>texto de ajuda: </b> @c.HelpText <br />
+                     <b>opções: </b>  <br />
+                     <ul>
+                         @foreach (var op in c.Options)
+                         {
+                             <li>@op</li>
+                         }
+                     </ul> <br />
+
+                     <b>aceita outros: </b> @c.AllowOthers <br />
+
+                }else if(item.Content is QuestionStructSingleSelect)
+                {
+                    QuestionStructSingleSelect c = item.Content as QuestionStructSingleSelect;
+                     <b>Escolha única</b> <br />
+                     <b>texto de ajuda: </b> @c.HelpText <br />
+                     <b>opções: </b>  <br />
+                     <ul>
+                         @foreach (var op in c.Options)
+                         {
+                             <li>@op</li>
+                         }
+                     </ul> <br />
+
+                     <b>aceita outros: </b> @c.AllowOthers <br />
+
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateBy.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateAt)
+            </td>
+            <td>
+                <a asp-controller="Questions" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

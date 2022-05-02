@@ -1,0 +1,117 @@
+﻿@using CampanhaMeo.Atilio.Helpers
+@model List<CampanhaMeo.Atilio.ModelViews.QuestionGenericToAnswer>
+
+<h1>@ViewData["Title"]</h1>
+
+<h4>@ViewData["Description"]</h4>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Reply">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            @for (var i = 0; i < Model.Count(); i++)
+            {
+                
+<hr />
+            <input type="hidden" asp-for="@Model[i].QuestionId" />
+            <input type="hidden" asp-for="@Model[i].Title" />
+            <input type="hidden" asp-for="@Model[i].IsMandatory" />
+            <input type="hidden" asp-for="@Model[i].TypeQuestion" />
+            <input type="hidden" asp-for="@Model[i].HelpText" />
+            <input type="hidden" asp-for="@Model[i].Mask" />
+            <input type="hidden" asp-for="@Model[i].AnswerMaxLenght" />
+            <input type="hidden" asp-for="@Model[i].AllowOthers" />
+            <div class="form-group">
+                <h5>@Model[i].Title</h5>
+            </div>
+            @if(Model[i].TypeQuestion == CampanhaMeo.Atilio.ModelViews.QuestionGenericToAnswer.TypeQuestionEnum.FreeText)
+            {
+                <input type="hidden" asp-for="@Model[i].Options[0]" />
+                <div class="form-group">
+                    <h6>@Model[i].HelpText</h6>
+                </div>
+            
+                <div class="form-group">
+                    <label asp-for="@Model[i].Value" class="control-label"></label>
+                    <input asp-for="@Model[i].Value" class="form-control" />
+                    <span asp-validation-for="@Model[i].Value" class="text-danger"></span>
+                </div>
+                    
+            }else if(Model[i].TypeQuestion == CampanhaMeo.Atilio.ModelViews.QuestionGenericToAnswer.TypeQuestionEnum.SingleSelect)
+            {
+                <div class="form-group">
+                    <h6>@Model[i].HelpText</h6>
+                </div>
+            
+                    <div class="form-group form-check">
+                @for (var j = 0; j < Model[i].Options.Count(); j++)
+                {
+                    <input type="hidden" asp-for="@Model[i].Options[j]" />
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" asp-for="@Model[i].SelectedByIndex" value="@j">
+                      <label class="form-check-label" for="option@(Model[i].QuestionId.ToString() + j)">
+                        @Model[i].Options[j]
+                      </label>
+                    </div>
+                    
+                }
+                    </div>
+                    if(Model[i].AllowOthers)
+                {
+                    
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="@Model[i].SelectedOthers" /> Outros
+                </label>
+            </div>
+                    <div class="form-group">
+                        <label asp-for="@Model[i].OthersUserInput" class="control-label"></label>
+                        <input asp-for="@Model[i].OthersUserInput" class="form-control" />
+                        <span asp-validation-for="@Model[i].OthersUserInput" class="text-danger"></span>
+                    </div>
+                    
+                }
+            }else if(Model[i].TypeQuestion == CampanhaMeo.Atilio.ModelViews.QuestionGenericToAnswer.TypeQuestionEnum.MultiSelect)
+            {
+                <div class="form-group">
+                    <h6>@Model[i].HelpText</h6>
+                </div>
+                @for (var j = 0; j < Model[i].Options.Count(); j++)
+                {
+                    <input type="hidden" asp-for="@Model[i].Options[j]" />
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="@Model[i].Selecteds[j]" /> @Model[i].Options[j]
+                        </label>
+                    </div>
+                }
+
+                if(Model[i].AllowOthers)
+                {
+                    
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="@Model[i].SelectedOthers" /> Outros
+                </label>
+            </div>
+                    <div class="form-group">
+                        <label asp-for="@Model[i].OthersUserInput" class="control-label"></label>
+                        <input asp-for="@Model[i].OthersUserInput" class="form-control" />
+                        <span asp-validation-for="@Model[i].OthersUserInput" class="text-danger"></span>
+                    </div>
+                    
+                }
+                    
+            }
+}
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
